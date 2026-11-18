@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>EduFuture AI | Smart Proctored Learning Platform</title>
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"/>
+</head>
+<body class="app-body">
+
+  <!-- ==================== MODERN LANDING PAGE (HERO STYLE) ==================== -->
+  <main class="landing-page active" id="landingPage">
+    <!-- Top Navigation Bar -->
+    <nav class="landing-nav">
+      <div class="landing-logo">EduFuture <span class="accent">AI</span></div>
+      <div class="landing-nav-links">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="landing-nav-actions">
+        <button class="nav-login-btn" onclick="openAuthModal('login')">Login</button>
+        <button class="nav-cta-btn" onclick="openAuthModal('signup')">Get Started</button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-badge-tag">— Smart Proctored Learning for Future Generations</div>
+        <h1 class="hero-title">
+          From Standard Learning <br>
+          to an <span class="accent-gradient">AI-Powered</span> Future
+        </h1>
+        <p class="hero-desc">
+          EduFuture AI provides secure, proctored examinations with strict tab-switch detection, live app usage logs, real-time teacher tracking, and personalized Edu AI tutoring.
+        </p>
+
+        <!-- Feature Icons Row -->
+        <div class="hero-features-row">
+          <div class="hero-feat-item">
+            <div class="feat-icon">🛡️</div>
+            <span>Secure Proctoring</span>
+          </div>
+          <div class="hero-feat-item">
+            <div class="feat-icon">⚡</div>
+            <span>Tab Switch Lock</span>
+          </div>
+          <div class="hero-feat-item">
+            <div class="feat-icon">🤖</div>
+            <span>Edu AI Tutor</span>
+          </div>
+          <div class="hero-feat-item">
+            <div class="feat-icon">📈</div>
+            <span>Parent Sync</span>
+          </div>
+        </div>
+
+        <div class="hero-cta-row">
+          <button class="btn-primary-hero" onclick="openAuthModal('signup')">Start Learning Free →</button>
+          <button class="btn-secondary-hero" onclick="openAuthModal('login')">Sign In to Portal</button>
+        </div>
+      </div>
+
+      <!-- Hero Right Graphic / Portal Cards Preview -->
+      <div class="hero-graphic">
+        <div class="floating-portal-card">
+          <div class="portal-card-header">
+            <span class="portal-dot red"></span>
+            <span class="portal-dot yellow"></span>
+            <span class="portal-dot green"></span>
+          </div>
+          <div class="portal-card-body">
+            <div class="portal-mini-item">🎓 <strong>Student Portal</strong><span>Proctored Exams</span></div>
+            <div class="portal-mini-item">👩‍🏫 <strong>Teacher Portal</strong><span>Attendance & Alerts</span></div>
+            <div class="portal-mini-item">👨‍👩‍👧 <strong>Parent Portal</strong><span>Child Progress</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- AUTH MODAL (LOGIN / SIGN UP WITH EMPTY BOXES) -->
+  <div class="auth-modal-overlay" id="authModalOverlay" style="display: none;">
+    <div class="login-box">
+      <button class="modal-close-btn" onclick="closeAuthModal()">✕</button>
+      <header>
+        <h1 id="authModalTitle">Login to EduFuture AI</h1>
+        <p id="authModalSubtitle">Enter your account credentials</p>
+      </header>
+
+      <div class="role-tabs" id="roleTabsContainer" role="tablist">
+        <button class="active" id="roleStudent" role="tab" onclick="selectRole('student')">🎓 Student</button>
+        <button id="roleTeacher" role="tab" onclick="selectRole('teacher')">👩‍🏫 Teacher</button>
+        <button id="roleParent" role="tab" onclick="selectRole('parent')">👨‍👩‍👧 Parent</button>
+      </div>
+
+      <div id="authError" class="error-banner" style="display: none;"></div>
+
+      <form id="authForm" onsubmit="handleAuthSubmit(event)">
+        <div class="field" id="fieldNameBox" style="display: none;">
+          <label for="authName">Full Name</label>
+          <input id="authName" type="text" placeholder="e.g., Alex Johnson" />
+        </div>
+
+        <div class="field">
+          <label for="authEmail">Email Address</label>
+          <input id="authEmail" type="email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="field">
+          <label for="authPassword">Password</label>
+          <input id="authPassword" type="password" placeholder="Enter password" required />
+        </div>
+
+        <div id="studentFields">
+          <div class="field">
+            <label for="level">Learning Level</label>
+            <select id="level">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate" selected>Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="authSubmitBtn">Login</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MAIN DASHBOARD VIEW ==================== -->
+  <div class="dashboard-page" id="dashboardPage">
+
+    <!-- Top Navigation Bar -->
+    <header class="role-switcher-bar">
+      <div class="brand-logo">EduFuture <span class="accent">AI</span></div>
+      <div class="role-pills" role="tablist" aria-label="Portal Switcher">
+        <button class="role-btn active" id="tabStudent" onclick="switchDashboardRole('student')">🎓 Student</button>
+        <button class="role-btn" id="tabTeacher" onclick="switchDashboardRole('teacher')">👩‍🏫 Teacher</button>
+        <button class="role-btn" id="tabParent" onclick="switchDashboardRole('parent')">👨‍👩‍👧 Parent</button>
+      </div>
+      <button class="logout-btn" onclick="logout()">🚪 Log Out</button>
+    </header>
+
+    <div class="dashboard-wrapper">
+
+      <!-- ==================== 1. STUDENT DASHBOARD ==================== -->
+      <div class="dashboard-panel active" id="studentDashboard">
+        <div class="layout-container">
+          <aside class="sidebar">
+            <nav class="nav-menu">
+              <button class="nav-item active" onclick="showSubSection('student', 'stuOverview', this)">📊 Dashboard Overview</button>
+              <button class="nav-item" onclick="showSubSection('student', 'stuAssessments', this)">🛡️ AI Assessments (Proctored)</button>
+              <button class="nav-item" onclick="showSubSection('student', 'stuSubjects', this)">📚 Learning Subjects</button>
+              <button class="nav-item" onclick="showSubSection('student', 'stuTutor', this)">🤖 Edu AI Tutor</button>
+              <button class="nav-item" onclick="showSubSection('student', 'stuChatboard', this)">💬 AI Chatboard</button>
+              <button class="nav-item" onclick="showSubSection('student', 'stuProgress', this)">📈 Student Progress</button>
+              <button class="nav-item" onclick="showSubSection('student', 'stuFuture', this)">🚀 Future Features</button>
+              <button class="nav-item logout-nav" onclick="logout()">🚪 Log Out</button>
+            </nav>
+            <div class="user-profile">
+              <div class="avatar">🎓</div>
+              <div class="user-info">
+                <span class="user-name" id="studentDisplayName">Alex Johnson</span>
+                <span class="user-role" id="studentDisplayLevel">Intermediate Student</span>
+              </div>
+            </div>
+          </aside>
+
+          <main class="dashboard-container">
+
+            <section class="sub-panel active" id="stuOverview">
+              <header class="top-header">
+                <div>
+                  <h1>Welcome Back, <span class="user-greeting-name">Alex Johnson</span>! 👋</h1>
+                  <p>AI-proctored assessments, live activity monitoring, and personalized Edu AI support.</p>
+                </div>
+              </header>
+
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <h3>Assigned Assessments</h3>
+                  <p class="stat-value" id="stuAssignedCount">📝 2 Active</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Latest Score</h3>
+                  <p class="stat-value" id="stuLatestScore">🎯 85%</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Proctoring Status</h3>
+                  <p class="stat-value" id="stuMonitorStatus">🛡️ Ready (3 Warnings = Auto-Submit)</p>
+                </div>
+                <div class="stat-card">
+                  <h3>AI Doubt Credits</h3>
+                  <p class="stat-value">🤖 Unlimited (Edu AI)</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <h2>🛡️ Live Proctoring & App Usage Monitor</h2>
+                <p class="muted-text">
+                  During assessments, EduFuture AI enables <strong>Full Screen Lock</strong>, monitors <strong>Tab Switches</strong>, detects <strong>Copy-Paste</strong> events, and logs app usage. If you switch tabs or exit full screen **3 times**, the exam will automatically submit.
+                </p>
+                <div style="margin-top: 16px;">
+                  <button class="btn-sm" onclick="showSubSection('student', 'stuAssessments', document.querySelectorAll('#studentDashboard .nav-item')[1])">
+                    Launch Proctored AI Assessment →
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="stuAssessments">
+              <header class="top-header">
+                <div>
+                  <h1>🛡️ AI Proctored Assessments</h1>
+                  <p>Full-screen lock, strict 3-warning auto-submit rule, copy-paste monitoring, and Edu AI doubt allowance.</p>
+                </div>
+              </header>
+
+              <div class="card" id="assignedAssessmentListCard">
+                <h2>Teacher-Assigned Assessments</h2>
+                <div class="course-list" id="studentAssignedList"></div>
+              </div>
+
+              <div class="card proctor-box" id="liveExamBox" style="display: none;">
+                <div class="exam-header">
+                  <div>
+                    <h2 id="activeExamTitle">Mathematics & Trigonometry Mastery Quiz</h2>
+                    <span class="badge warning" id="examTimerBadge">Start Time: 10:00 AM</span>
+                    <span class="badge" id="examWarningBadge">Warnings: 0 / 3</span>
+                  </div>
+                  <button class="btn-sm" onclick="requestFullScreenLock()">⛶ Re-Lock Full Screen</button>
+                </div>
+
+                <div id="liveProctorAlert" class="error-banner" style="display: none; margin-top: 12px;"></div>
+
+                <div class="exam-questions">
+                  <div class="q-block">
+                    <p><strong>Q1.</strong> If $\sin(\theta) = \frac{3}{5}$ in a right-angled triangle, what is $\cos(\theta)$?</p>
+                    <label><input type="radio" name="q1" value="correct" checked/> 4/5</label>
+                    <label><input type="radio" name="q1" value="wrong"/> 3/4</label>
+                  </div>
+
+                  <div class="q-block">
+                    <p><strong>Q2.</strong> Write a brief explanation of how $\tan(\theta)$ relates to $\sin(\theta)$ and $\cos(\theta)$ (Copy-Paste is monitored):</p>
+                    <textarea id="examTextAnswer" rows="3" placeholder="Type your answer here..."></textarea>
+                  </div>
+
+                  <div class="guru-exam-box">
+                    <h4>🤖 Ask Edu AI Doubt (Allowed During Assessment)</h4>
+                    <div class="inline-form">
+                      <input type="text" id="examGuruInput" placeholder="Ask a conceptual doubt..." />
+                      <button class="btn-sm" type="button" onclick="askGuruDuringExam()">Ask Edu AI</button>
+                    </div>
+                    <div id="examGuruReply" class="ai-response" style="display: none;"></div>
+                  </div>
+                </div>
+
+                <div class="activity-monitor-panel">
+                  <h4>📋 Real-Time Activity & App Usage Log (Visible to Teacher)</h4>
+                  <pre id="liveActivityLogConsole" class="log-console"></pre>
+                </div>
+
+                <div style="margin-top: 18px; display: flex; gap: 12px;">
+                  <button class="btn" type="button" onclick="submitProctoredExam(false)">Submit Assessment & Send Report</button>
+                </div>
+              </div>
+
+              <div class="card" id="examResultCard" style="display: none;">
+                <h2>✅ Assessment Report Generated & Sent to Teacher</h2>
+                <pre id="finalReportOutput" class="log-console"></pre>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="stuSubjects">
+              <header class="top-header">
+                <div>
+                  <h1>📚 Learning Subjects</h1>
+                  <p>Interactive AI-guided curriculum tracks tailored to your learning level.</p>
+                </div>
+              </header>
+              <div class="course-list">
+                <div class="course-item">
+                  <div class="course-details">
+                    <h4>Mathematics & Trigonometry</h4>
+                    <p>Unit 3: Trigonometric Identities & Applications</p>
+                  </div>
+                  <div class="progress-bar"><div class="progress" style="width: 72%;"></div></div>
+                  <button class="btn-sm" onclick="showSubSection('student', 'stuTutor', document.querySelectorAll('#studentDashboard .nav-item')[3])">Study with AI</button>
+                </div>
+                <div class="course-item">
+                  <div class="course-details">
+                    <h4>Artificial Intelligence & Machine Learning</h4>
+                    <p>Module 4: Neural Networks & Backpropagation</p>
+                  </div>
+                  <div class="progress-bar"><div class="progress" style="width: 85%;"></div></div>
+                  <button class="btn-sm">Resume</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="stuTutor">
+              <header class="top-header">
+                <div>
+                  <h1>🤖 Edu AI Personal Tutor</h1>
+                  <p>Ask step-by-step explanations on Trigonometry, Coding, or Science.</p>
+                </div>
+              </header>
+              <div class="card">
+                <div class="field">
+                  <label for="aiTutorInput">What topic do you need help with?</label>
+                  <input id="aiTutorInput" type="text" placeholder="e.g., Explain Trigonometry ratios"/>
+                </div>
+                <button class="btn" onclick="askAITutorGeneral()">Get Step-by-Step Explanation</button>
+                <div id="aiTutorOutput" class="ai-response" style="display: none;"></div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="stuChatboard">
+              <header class="top-header">
+                <div>
+                  <h1>💬 AI Study Chatboard</h1>
+                  <p>Interactive multi-turn study conversation powered by EduFuture AI.</p>
+                </div>
+              </header>
+              <div class="card">
+                <div id="chatboardHistory" class="chat-history">
+                  <div class="chat-msg ai"><strong>EduFuture AI:</strong> Hi! Ask me anything about your subjects, formulas, or upcoming assessments.</div>
+                </div>
+                <div class="inline-form" style="margin-top: 14px;">
+                  <input id="chatboardInput" type="text" placeholder="Type your message..."/>
+                  <button class="btn-sm" onclick="sendChatboardMessage()">Send</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="stuProgress">
+              <header class="top-header">
+                <div>
+                  <h1>📈 Student Progress & AI Recommendations</h1>
+                  <p>Your latest assessment performance, attendance status, and practice suggestions.</p>
+                </div>
+              </header>
+              <div class="card">
+                <h2>Recent Assessment Performance</h2>
+                <div id="studentProgressList" class="course-list"></div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="stuFuture">
+              <header class="top-header">
+                <div>
+                  <h1>🚀 Future Features Roadmap</h1>
+                  <p>Upcoming innovations on the EduFuture AI platform.</p>
+                </div>
+              </header>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <h3>🥽 AR/VR Virtual Science Labs</h3>
+                  <p class="muted-text" style="margin-top:8px;">3D interactive Chemistry & Physics experiments in the browser.</p>
+                </div>
+                <div class="stat-card">
+                  <h3>🎙️ Multilingual Voice Edu AI</h3>
+                  <p class="muted-text" style="margin-top:8px;">Real-time voice tutoring in Telugu, Hindi, and English.</p>
+                </div>
+              </div>
+            </section>
+
+          </main>
+        </div>
+      </div>
+
+
+      <!-- ==================== 2. TEACHER DASHBOARD ==================== -->
+      <div class="dashboard-panel" id="teacherDashboard">
+        <div class="layout-container">
+          <aside class="sidebar">
+            <nav class="nav-menu">
+              <button class="nav-item active" onclick="showSubSection('teacher', 'teaAlerts', this)">🚨 Proctoring Alerts & Logs</button>
+              <button class="nav-item" onclick="showSubSection('teacher', 'teaAttendance', this)">📅 Student Attendance</button>
+              <button class="nav-item" onclick="showSubSection('teacher', 'teaAssign', this)">📝 Assign Assessment</button>
+              <button class="nav-item" onclick="showSubSection('teacher', 'teaProgress', this)">📈 Student Progress</button>
+              <button class="nav-item logout-nav" onclick="logout()">🚪 Log Out</button>
+            </nav>
+            <div class="user-profile">
+              <div class="avatar">👩‍🏫</div>
+              <div class="user-info">
+                <span class="user-name" id="teacherDisplayName">Dr. Aris Thorne</span>
+                <span class="user-role">Lead AI Educator</span>
+              </div>
+            </div>
+          </aside>
+
+          <main class="dashboard-container">
+
+            <section class="sub-panel active" id="teaAlerts">
+              <header class="top-header">
+                <div>
+                  <h1>🚨 Proctoring Warnings & Activity Alerts</h1>
+                  <p>Live student exam activity logs, warnings, Edu AI usage, and AI recommendations.</p>
+                </div>
+              </header>
+              <div id="teacherAlertsContainer"></div>
+            </section>
+
+            <section class="sub-panel" id="teaAttendance">
+              <header class="top-header">
+                <div>
+                  <h1>📅 Mark Student Attendance</h1>
+                  <p>Attendance marked here automatically syncs to the Parent Dashboard.</p>
+                </div>
+              </header>
+
+              <div class="content-grid">
+                <div class="card">
+                  <h2>Record Daily Attendance</h2>
+                  <form onsubmit="submitTeacherAttendance(event)">
+                    <div class="field">
+                      <label for="attStudentName">Student Name</label>
+                      <input id="attStudentName" type="text" value="Alex Johnson" required />
+                    </div>
+                    <div class="field">
+                      <label for="attDate">Date</label>
+                      <input id="attDate" type="date" value="2026-11-17" required />
+                    </div>
+                    <div class="field">
+                      <label for="attStatus">Attendance Status</label>
+                      <select id="attStatus">
+                        <option value="Present">✅ Present</option>
+                        <option value="Absent">❌ Absent</option>
+                        <option value="Late">⏰ Late</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="attRemarks">Teacher Note (Visible to Parent)</label>
+                      <input id="attRemarks" type="text" placeholder="e.g., Completed Trigonometry practice"/>
+                    </div>
+                    <button type="submit" class="btn">Save Attendance & Notify Parent</button>
+                  </form>
+                  <div id="attFeedback" class="ai-response" style="display:none;"></div>
+                </div>
+
+                <div class="card">
+                  <h2>Recent Attendance Log</h2>
+                  <ul id="teacherAttendanceList" class="task-list"></ul>
+                </div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="teaAssign">
+              <header class="top-header">
+                <div>
+                  <h1>📝 Assign Assessment to Students</h1>
+                  <p>Create proctored assessments that immediately appear in the Student Dashboard.</p>
+                </div>
+              </header>
+
+              <div class="content-grid">
+                <div class="card">
+                  <h2>Create New Assessment</h2>
+                  <form onsubmit="submitNewAssessment(event)">
+                    <div class="field">
+                      <label for="assignTitle">Assessment Title</label>
+                      <input id="assignTitle" type="text" placeholder="e.g., Trigonometry Advanced Test" required />
+                    </div>
+                    <div class="field">
+                      <label for="assignSubject">Subject</label>
+                      <input id="assignSubject" type="text" placeholder="e.g., Mathematics" required />
+                    </div>
+                    <div class="field">
+                      <label for="assignTopic">Key Concept / AI Focus Topic</label>
+                      <input id="assignTopic" type="text" placeholder="e.g., Trigonometry" required />
+                    </div>
+                    <div class="field">
+                      <label for="assignDueDate">Due Date</label>
+                      <input id="assignDueDate" type="date" value="2026-11-25" required />
+                    </div>
+                    <button type="submit" class="btn">Assign Assessment</button>
+                  </form>
+                  <div id="assignFeedback" class="ai-response" style="display:none;"></div>
+                </div>
+
+                <div class="card">
+                  <h2>Currently Assigned Assessments</h2>
+                  <div id="teacherAssignedList" class="course-list"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="teaProgress">
+              <header class="top-header">
+                <div>
+                  <h1>📈 Class & Student Progress</h1>
+                  <p>Track student scores, warning counts, and AI-identified learning gaps.</p>
+                </div>
+              </header>
+              <div class="card">
+                <div id="teacherStudentProgressList" class="course-list"></div>
+              </div>
+            </section>
+
+          </main>
+        </div>
+      </div>
+
+
+      <!-- ==================== 3. PARENT DASHBOARD ==================== -->
+      <div class="dashboard-panel" id="parentDashboard">
+        <div class="layout-container">
+          <aside class="sidebar">
+            <nav class="nav-menu">
+              <button class="nav-item active" onclick="showSubSection('parent', 'parOverview', this)">📊 Progress & Results</button>
+              <button class="nav-item" onclick="showSubSection('parent', 'parAttendance', this)">📅 Child Attendance</button>
+              <button class="nav-item" onclick="showSubSection('parent', 'parActivity', this)">🛡️ Activity & AI Insights</button>
+              <button class="nav-item logout-nav" onclick="logout()">🚪 Log Out</button>
+            </nav>
+            <div class="user-profile">
+              <div class="avatar">👨‍👩‍👧</div>
+              <div class="user-info">
+                <span class="user-name" id="parentDisplayName">Robert Johnson</span>
+                <span class="user-role">Parent / Guardian</span>
+              </div>
+            </div>
+          </aside>
+
+          <main class="dashboard-container">
+
+            <section class="sub-panel active" id="parOverview">
+              <header class="top-header">
+                <div>
+                  <h1>Parent Portal 👋</h1>
+                  <p>Real-time study progress, assessment scores, attendance, and AI learning recommendations.</p>
+                </div>
+              </header>
+
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <h3>Child Name</h3>
+                  <p class="stat-value">🎓 Alex Johnson</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Latest Assessment Score</h3>
+                  <p class="stat-value" id="parLatestScore">🌟 85%</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Attendance Summary</h3>
+                  <p class="stat-value" id="parAttendanceSummary">📅 100% Present</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Proctoring Warnings</h3>
+                  <p class="stat-value" id="parWarningCount">⚠️ 2 Warnings</p>
+                </div>
+              </div>
+
+              <div class="content-grid">
+                <div class="card">
+                  <h2>📝 Assessment Results & Study Progress</h2>
+                  <div id="parentResultsList" class="course-list"></div>
+                </div>
+
+                <aside class="dashboard-sidebar">
+                  <div class="card ai-card">
+                    <h2>🤖 AI Learning Recommendations</h2>
+                    <div id="parentAIRecommendations" class="ai-response" style="display: block;">
+                      Student needs help with "Trigonometry". Practice recommended.
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="parAttendance">
+              <header class="top-header">
+                <div>
+                  <h1>📅 Child Attendance Record</h1>
+                  <p>Updated live whenever your child's teacher marks attendance.</p>
+                </div>
+              </header>
+              <div class="card">
+                <h2>Daily Attendance History</h2>
+                <ul id="parentAttendanceList" class="task-list"></ul>
+              </div>
+            </section>
+
+            <section class="sub-panel" id="parActivity">
+              <header class="top-header">
+                <div>
+                  <h1>🛡️ Assessment Activity Summaries</h1>
+                  <p>Transparent breakdown of exam focus, warnings, and Edu AI doubt usage.</p>
+                </div>
+              </header>
+              <div id="parentActivityLogsContainer"></div>
+            </section>
+
+          </main>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==================== CLIENT SCRIPT ==================== -->
+  <script>
+    let currentAuthMode = 'login';
+    let currentRole = 'student';
+    let currentUser = { name: 'Alex Johnson', role: 'student', learning_level: 'intermediate' };
+
+    let examActive = false;
+    let examStartTime = '';
+    let warningCount = 0;
+    let guruDoubtCount = 0;
+    let activityLogs = [];
+    let activeAssessmentMeta = { title: 'Mathematics & Trigonometry Mastery Quiz', subject: 'Mathematics', weak_topic: 'Trigonometry' };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('/api/session');
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+          currentUser = data.user;
+          applyUserToUI(data.user);
+          showDashboard(data.user.role);
+        }
+      } catch (err) {
+        console.error('Session check error:', err);
+      }
+      await refreshAllDashboardData();
+    });
+
+    function openAuthModal(mode) {
+      currentAuthMode = mode;
+      const modal = document.getElementById('authModalOverlay');
+      const title = document.getElementById('authModalTitle');
+      const subtitle = document.getElementById('authModalSubtitle');
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const nameBox = document.getElementById('fieldNameBox');
+      const studentFields = document.getElementById('studentFields');
+      const errorBox = document.getElementById('authError');
+
+      errorBox.style.display = 'none';
+      document.getElementById('authForm').reset();
+
+      if (mode === 'signup') {
+        title.innerText = 'Create EduFuture AI Account';
+        subtitle.innerText = 'Register your details to get started';
+        submitBtn.innerText = 'Sign Up';
+        nameBox.style.display = 'flex';
+        document.getElementById('authName').required = true;
+        studentFields.style.display = currentRole === 'student' ? 'block' : 'none';
+      } else {
+        title.innerText = 'Login to EduFuture AI';
+        subtitle.innerText = 'Enter your account credentials';
+        submitBtn.innerText = 'Login';
+        nameBox.style.display = 'none';
+        document.getElementById('authName').required = false;
+        studentFields.style.display = 'none';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModalOverlay').style.display = 'none';
+    }
+
+    function selectRole(role) {
+      currentRole = role;
+      ['student', 'teacher', 'parent'].forEach((r) => {
+        const btn = document.getElementById(`role${capitalize(r)}`);
+        if (btn) {
+          const isActive = r === role;
+          btn.classList.toggle('active', isActive);
+        }
+      });
+      if (currentAuthMode === 'signup') {
+        document.getElementById('studentFields').style.display = role === 'student' ? 'block' : 'none';
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const errorBox = document.getElementById('authError');
+      errorBox.style.display = 'none';
+
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+
+      let endpoint = '/api/login';
+      let payload = { email, password };
+
+      if (currentAuthMode === 'signup') {
+        endpoint = '/api/register';
+        payload = {
+          name: document.getElementById('authName').value.trim(),
+          email,
+          password,
+          role: currentRole,
+          level: document.getElementById('level').value
+        };
+      }
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        errorBox.innerText = data.message || 'Authentication failed.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      currentUser = data.user;
+      applyUserToUI(data.user);
+      closeAuthModal();
+      showDashboard(data.user.role);
+      await refreshAllDashboardData();
+    }
+
+    function applyUserToUI(user) {
+      document.querySelectorAll('.user-greeting-name').forEach(el => el.innerText = user.name);
+      if (user.role === 'student') {
+        document.getElementById('studentDisplayName').innerText = user.name;
+        document.getElementById('studentDisplayLevel').innerText = `${capitalize(user.learning_level)} Student`;
+      } else if (user.role === 'teacher') {
+        document.getElementById('teacherDisplayName').innerText = user.name;
+      } else if (user.role === 'parent') {
+        document.getElementById('parentDisplayName').innerText = user.name;
+      }
+    }
+
+    function showDashboard(role) {
+      document.getElementById('landingPage').classList.remove('active');
+      document.getElementById('dashboardPage').classList.add('active');
+      switchDashboardRole(role);
+    }
+
+    async function switchDashboardRole(role) {
+      ['student', 'teacher', 'parent'].forEach((r) => {
+        const tabBtn = document.getElementById(`tab${capitalize(r)}`);
+        const panel = document.getElementById(`${r}Dashboard`);
+        if (tabBtn && panel) {
+          const isActive = r === role;
+          tabBtn.classList.toggle('active', isActive);
+          panel.classList.toggle('active', isActive);
+        }
+      });
+      await refreshAllDashboardData();
+    }
+
+    function showSubSection(portal, sectionId, clickedBtn) {
+      const container = document.getElementById(`${portal}Dashboard`);
+      container.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+      container.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      if (clickedBtn) clickedBtn.classList.add('active');
+    }
+
+    async function logout() {
+      if (examActive) {
+        examActive = false;
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+      await fetch('/api/logout', { method: 'POST' });
+      document.getElementById('dashboardPage').classList.remove('active');
+      document.getElementById('landingPage').classList.add('active');
+    }
+
+    function formatNowTime() {
+      return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function startProctoredAssessment(title, subject, weakTopic) {
+      activeAssessmentMeta = { title, subject, weak_topic: weakTopic };
+      examActive = true;
+      examStartTime = formatNowTime();
+      warningCount = 0;
+      guruDoubtCount = 0;
+      activityLogs = [];
+
+      document.getElementById('activeExamTitle').innerText = title;
+      document.getElementById('examTimerBadge').innerText = `Start Time: ${examStartTime}`;
+      document.getElementById('examWarningBadge').innerText = `Warnings: 0 / 3`;
+      document.getElementById('liveProctorAlert').style.display = 'none';
+      document.getElementById('examResultCard').style.display = 'none';
+      document.getElementById('liveExamBox').style.display = 'block';
+      document.getElementById('stuMonitorStatus').innerText = '🔴 Proctoring Active (0/3)';
+
+      appendActivityLog(`${examStartTime} - Assessment Started in Full Screen Lock Mode`);
+      requestFullScreenLock();
+    }
+
+    function requestFullScreenLock() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen && !document.fullscreenElement) {
+        elem.requestFullscreen().catch(() => {
+          appendActivityLog(`${formatNowTime()} - Full Screen Lock Requested`);
+        });
+      }
+    }
+
+    function appendActivityLog(entry) {
+      activityLogs.push(entry);
+      const consoleEl = document.getElementById('liveActivityLogConsole');
+      if (consoleEl) {
+        consoleEl.innerText = activityLogs.join('\n');
+      }
+    }
+
+    function triggerProctorWarning(reason) {
+      if (!examActive) return;
+      warningCount += 1;
+      const timeStr = formatNowTime();
+      const logLine = `${timeStr} - ${reason} [Warning ${warningCount}]`;
+      appendActivityLog(logLine);
+
+      document.getElementById('examWarningBadge').innerText = `Warnings: ${warningCount} / 3`;
+      const alertBox = document.getElementById('liveProctorAlert');
+      alertBox.style.display = 'block';
+
+      if (warningCount >= 3) {
+        alertBox.innerText = `🚨 3 Proctoring Warnings Reached! Exam is automatically submitting now.`;
+        setTimeout(() => {
+          submitProctoredExam(true);
+        }, 1500);
+      } else {
+        alertBox.innerText = `⚠️ Proctoring Warning (${warningCount}/3): ${reason}. Reaching 3 warnings will auto-submit your exam!`;
+      }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && examActive) {
+        triggerProctorWarning('Tab Switched');
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement && examActive) {
+        triggerProctorWarning('Full Screen Exited');
+      }
+    });
+
+    document.addEventListener('paste', () => {
+      if (examActive) {
+        const timeStr = formatNowTime();
+        appendActivityLog(`${timeStr} - Copy-Paste Detected`);
+      }
+    });
+
+    async function askGuruDuringExam() {
+      const input = document.getElementById('examGuruInput');
+      const replyBox = document.getElementById('examGuruReply');
+      const prompt = input.value.trim();
+      if (!prompt) return;
+
+      guruDoubtCount += 1;
+      const timeStr = formatNowTime();
+      appendActivityLog(`${timeStr} - Asked Edu AI (${guruDoubtCount} doubt${guruDoubtCount > 1 ? 's' : ''}) [Allowed]`);
+
+      replyBox.style.display = 'block';
+      replyBox.innerText = 'Edu AI is answering your doubt...';
+
+      const res = await fetch('/api/ai/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, context: 'guru_exam' })
+      });
+      const data = await res.json();
+      replyBox.innerText = data.response || 'Edu AI response logged.';
+      input.value = '';
+    }
+
+    async function submitProctoredExam(autoSubmitted = false) {
+      if (!examActive) return;
+      examActive = false;
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+
+      const submitTime = formatNowTime();
+      const q1Ans = document.querySelector('input[name="q1"]:checked')?.value;
+      const textAns = document.getElementById('examTextAnswer').value.trim();
+      let score = q1Ans === 'correct' ? 75 : 50;
+      if (textAns.length > 10) score += 10;
+      if (autoSubmitted) score = Math.max(0, score - 20);
+
+      const payload = {
+        student_name: currentUser.name || 'Alex Johnson',
+        assessment_title: activeAssessmentMeta.title,
+        subject: activeAssessmentMeta.subject,
+        weak_topic: activeAssessmentMeta.weak_topic,
+        start_time: examStartTime || '10:00 AM',
+        submit_time: submitTime,
+        score: score,
+        warnings_count: warningCount,
+        activity_log_text: activityLogs.length ? activityLogs.join('\n') : `${submitTime} - Completed cleanly.`,
+        auto_submitted: autoSubmitted
+      };
+
+      const res = await fetch('/api/student/submit-assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        const s = data.submission;
+        const formattedReport =
+          `Start Time: ${s.start_time} | Submit Time: ${s.submit_time} | Score: ${s.score}%\n\n` +
+          `Activity Log:\n${s.activity_log_text}\n\n` +
+          `Final Status: ${s.final_status}\n` +
+          `AI Suggestion: ${s.ai_suggestion}`;
+
+        document.getElementById('liveExamBox').style.display = 'none';
+        document.getElementById('examResultCard').style.display = 'block';
+        document.getElementById('finalReportOutput').innerText = formattedReport;
+        document.getElementById('stuMonitorStatus').innerText = '✅ Report Sent';
+        await refreshAllDashboardData();
+      }
+    }
+
+    async function askAITutorGeneral() {
+      const prompt = document.getElementById('aiTutorInput').value.trim();
+      const out = document.getElementById('aiTutorOutput');
+      if (!prompt) return;
+      out.style.display = 'block';
+      out.innerText = 'Edu AI is generating explanation...';
+
+      const res = await fetch('/api/ai/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, context: 'tutor' })
+      });
+      const data = await res.json();
+      out.innerText = data.response;
+    }
+
+    async function sendChatboardMessage() {
+      const input = document.getElementById('chatboardInput');
+      const history = document.getElementById('chatboardHistory');
+      const prompt = input.value.trim();
+      if (!prompt) return;
+
+      history.innerHTML += `<div class="chat-msg user"><strong>You:</strong> ${escapeHtml(prompt)}</div>`;
+      input.value = '';
+
+      const res = await fetch('/api/ai/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, context: 'chatboard' })
+      });
+      const data = await res.json();
+      history.innerHTML += `<div class="chat-msg ai"><strong>EduFuture AI:</strong> ${escapeHtml(data.response)}</div>`;
+      history.scrollTop = history.scrollHeight;
+    }
+
+    async function submitTeacherAttendance(e) {
+      e.preventDefault();
+      const payload = {
+        student_name: document.getElementById('attStudentName').value.trim(),
+        date: document.getElementById('attDate').value,
+        status: document.getElementById('attStatus').value,
+        remarks: document.getElementById('attRemarks').value.trim()
+      };
+      const res = await fetch('/api/teacher/attendance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      const fb = document.getElementById('attFeedback');
+      fb.style.display = 'block';
+      fb.innerText = data.message;
+      await refreshAllDashboardData();
+    }
+
+    async function submitNewAssessment(e) {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('assignTitle').value.trim(),
+        subject: document.getElementById('assignSubject').value.trim(),
+        topic: document.getElementById('assignTopic').value.trim(),
+        due_date: document.getElementById('assignDueDate').value
+      };
+      const res = await fetch('/api/teacher/assign-assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      const fb = document.getElementById('assignFeedback');
+      fb.style.display = 'block';
+      fb.innerText = data.message;
+      e.target.reset();
+      await refreshAllDashboardData();
+    }
+
+    async function refreshAllDashboardData() {
+      try {
+        const res = await fetch('/api/dashboard-data');
+        const data = await res.json();
+
+        const assessments = data.assigned_assessments || [];
+        document.getElementById('stuAssignedCount').innerText = `📝 ${assessments.length} Active`;
+
+        document.getElementById('studentAssignedList').innerHTML = assessments.map(a => `
+          <div class="course-item">
+            <div class="course-details">
+              <h4>${escapeHtml(a.title)}</h4>
+              <p>Subject: ${escapeHtml(a.subject)} • Focus: ${escapeHtml(a.weak_topic_focus)} • Due: ${escapeHtml(a.due_date)}</p>
+            </div>
+            <button class="btn-sm" onclick="startProctoredAssessment('${escapeAttr(a.title)}', '${escapeAttr(a.subject)}', '${escapeAttr(a.weak_topic_focus)}')">
+              Start Proctored Exam
+            </button>
+          </div>
+        `).join('');
+
+        document.getElementById('teacherAssignedList').innerHTML = assessments.map(a => `
+          <div class="course-item">
+            <div class="course-details">
+              <h4>${escapeHtml(a.title)}</h4>
+              <p>${escapeHtml(a.subject)} • AI Topic: ${escapeHtml(a.weak_topic_focus)} • Due: ${escapeHtml(a.due_date)}</p>
+            </div>
+            <span class="badge">Assigned</span>
+          </div>
+        `).join('');
+
+        const submissions = data.submissions || [];
+        if (submissions.length > 0) {
+          const latest = submissions[0];
+          document.getElementById('stuLatestScore').innerText = `🎯 ${latest.score}%`;
+          document.getElementById('parLatestScore').innerText = `🌟 ${latest.score}%`;
+          document.getElementById('parWarningCount').innerText = `⚠️ ${latest.warnings_count} Warning${latest.warnings_count === 1 ? '' : 's'}`;
+          document.getElementById('parentAIRecommendations').innerText = latest.ai_suggestion;
+        }
+
+        document.getElementById('teacherAlertsContainer').innerHTML = submissions.map(s => `
+          <div class="card alert-report-card">
+            <div class="report-meta-header">
+              <div>
+                <h3>Student: ${escapeHtml(s.student_name)} — ${escapeHtml(s.assessment_title)}</h3>
+                <p class="report-timing">
+                  <strong>Start Time:</strong> ${escapeHtml(s.start_time)} &nbsp;|&nbsp;
+                  <strong>Submit Time:</strong> ${escapeHtml(s.submit_time)} &nbsp;|&nbsp;
+                  <strong>Score:</strong> ${s.score}%
+                </p>
+              </div>
+              <span class="badge ${s.warnings_count > 0 ? 'warning' : ''}">${s.warnings_count} Warnings</span>
+            </div>
+            <div class="activity-monitor-panel">
+              <strong>Activity Log:</strong>
+              <pre class="log-console">${escapeHtml(s.activity_log_text)}</pre>
+            </div>
+            <p style="margin-top:10px; font-size:0.9rem;"><strong>Final Status:</strong> ${escapeHtml(s.final_status)}</p>
+            <div class="ai-response" style="display:block; margin-top:8px;">
+              <strong>AI Suggestion:</strong> ${escapeHtml(s.ai_suggestion)}
+            </div>
+          </div>
+        `).join('');
+
+        const progressHtml = submissions.map(s => `
+          <div class="course-item">
+            <div class="course-details">
+              <h4>${escapeHtml(s.student_name)} — ${escapeHtml(s.assessment_title)}</h4>
+              <p>${escapeHtml(s.final_status)} | ${escapeHtml(s.ai_suggestion)}</p>
+            </div>
+            <span class="score-badge">${s.score}%</span>
+          </div>
+        `).join('');
+
+        document.getElementById('studentProgressList').innerHTML = progressHtml;
+        document.getElementById('teacherStudentProgressList').innerHTML = progressHtml;
+        document.getElementById('parentResultsList').innerHTML = progressHtml;
+
+        document.getElementById('parentActivityLogsContainer').innerHTML = submissions.map(s => `
+          <div class="card">
+            <h3>${escapeHtml(s.assessment_title)} (${escapeHtml(s.start_time)} - ${escapeHtml(s.submit_time)})</h3>
+            <pre class="log-console" style="margin-top:10px;">${escapeHtml(s.activity_log_text)}</pre>
+            <p style="margin-top:10px; font-size:0.9rem;"><strong>Final Status:</strong> ${escapeHtml(s.final_status)}</p>
+            <div class="ai-response" style="display:block;"><strong>AI Learning Recommendation:</strong> ${escapeHtml(s.ai_suggestion)}</div>
+          </div>
+        `).join('');
+
+        const attendance = data.attendance || [];
+        const presentCount = attendance.filter(r => r.status === 'Present').length;
+        const attRate = attendance.length ? Math.round((presentCount / attendance.length) * 100) : 100;
+        document.getElementById('parAttendanceSummary').innerText = `📅 ${attRate}% Present`;
+
+        const attHtml = attendance.map(r => `
+          <li>
+            <span><strong>${escapeHtml(r.date)}</strong> — ${escapeHtml(r.student_name)} ${r.remarks ? '(' + escapeHtml(r.remarks) + ')' : ''}</span>
+            <span class="badge ${r.status === 'Absent' ? 'warning' : ''}">${escapeHtml(r.status)}</span>
+          </li>
+        `).join('');
+
+        document.getElementById('teacherAttendanceList').innerHTML = attHtml;
+        document.getElementById('parentAttendanceList').innerHTML = attHtml;
+
+      } catch (err) {
+        console.error('Failed to sync dashboard data:', err);
+      }
+    }
+
+    function capitalize(str) {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.innerText = text || '';
+      return div.innerHTML;
+    }
+
+    function escapeAttr(text) {
+      return (text || '').replace(/'/g, "\\'");
+    }
+  </script>
+</body>
+</html>
